@@ -50,7 +50,7 @@ struct Wrapper
 
     void print()
     {
-        std::cout << "wrapper::print: " << val << std::endl;
+        std::cout << "wrapper::print( " << val << ")" << std::endl;
     }
 
 private:
@@ -74,11 +74,19 @@ private:
     Point point;
 };
 
+template<typename T>
+void variadicHelper(T&& first)
+{
+    Wrapper wrapper(std::forward<T>(first));
+    wrapper.print();
+}
+
 template<typename T, typename ... Args>
 void variadicHelper(T&& first, Args&& ... args)
 {
-    Wrapper<T>( std::forward<T>(first)).print();
-    Wrapper<T>( std::forward<T>(args) ...);
+    Wrapper wrapper ( std::forward<T>(first));
+    wrapper.print();
+    variadicHelper( std::forward<Args>(args) ...);
     
 }
 
