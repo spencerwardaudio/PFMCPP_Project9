@@ -58,14 +58,14 @@ private:
 };
 
 template<>
-struct Wrapper<Point>
+struct Wrapper<Point>   //#8
 {
     Wrapper(Point&& p) : point(std::move(p))
     {
         std::cout << "Wrapper(" << typeid(point).name() << ")" << std::endl;
     }
 
-    void print()
+    void print()    //#5
     {
         std::cout << "Wrapper::print(" << point.toString() << ")" << std::endl;
     }
@@ -74,19 +74,20 @@ private:
     Point point;
 };
 
-template<typename T>
-void variadicHelper(T&& first)
+
+template<typename T>    //#4
+void variadicHelper(T&& first)  //#9
 {
-    Wrapper wrapper(std::forward<T>(first));
+    Wrapper wrapper(std::forward<T>(first));    //#6
     wrapper.print();
 }
 
 template<typename T, typename ... Args>
 void variadicHelper(T&& first, Args&& ... args)
 {
-    Wrapper wrapper ( std::forward<T>(first) );
+    Wrapper wrapper ( std::forward<T>(first) ); //#6
     wrapper.print();
-    variadicHelper( std::forward<Args>(args) ...);
+    variadicHelper( std::forward<Args>(args) ...);  //#7
 }
 
 /*
