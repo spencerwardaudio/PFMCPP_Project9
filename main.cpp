@@ -70,7 +70,8 @@ void Wrapper<Point>::print()
 //     wrapper.print();
 // }
 
-template<typename...Args> void variadicHelper(){}
+template<typename...Args> 
+void variadicHelper(){}
 
 template<typename T, typename ... Args>
 void variadicHelper(T&& first, Args&& ... args)
@@ -80,11 +81,6 @@ void variadicHelper(T&& first, Args&& ... args)
     variadicHelper( std::forward<Args>(args) ...);  //#7
 }
 
-template<typename ... Args>
-void variadicHelper(Args&& ... args)
-{
-    variadicHelper(args...);
-}
 
 /*
  MAKE SURE YOU ARE NOT ON THE MASTER BRANCH
