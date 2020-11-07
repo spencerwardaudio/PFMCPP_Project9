@@ -104,7 +104,7 @@ int main()
 {
     variadicHelper( 3, std::string("burgers"), 2.5, Point{3.f, 0.14f} );
 
-    // variadicHelper();
+    variadicHelper();
 }
 
 
