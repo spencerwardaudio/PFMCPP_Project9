@@ -58,36 +58,37 @@ private:
 };
 
 template<>
-struct Wrapper<Point>   //#8
-{
-    Wrapper(Point&& p) : point(std::move(p))
-    {
-        std::cout << "Wrapper(" << typeid(point).name() << ")" << std::endl;
-    }
-
-    void print()    //#5
-    {
-        std::cout << "Wrapper::print(" << point.toString() << ")" << std::endl;
-    }
-
-private:
-    Point point;
-};
-
-
-template<typename T>    //#4
-void variadicHelper(T&& first)  //#9
-{
-    Wrapper wrapper(std::forward<T>(first));    //#6
-    wrapper.print();
+void Wrapper<Point>::print() 
+{ 
+    std::cout << "Wrapper::print(" << val.toString() << ")" << std::endl;
 }
 
-template<typename T, typename ... Args>
-void variadicHelper(T&& first, Args&& ... args)
+// template<typename T>    //#4
+// void variadicHelper(T&& first)  //#9
+// {
+//     Wrapper wrapper(std::forward<T>(first));    //#6
+//     wrapper.print();
+// }
+
+// template<typename T, typename ... Args>
+// void variadicHelper(T&& first, Args&& ... args)
+// {
+//     Wrapper wrapper ( std::forward<T>(first) ); //#6
+//     wrapper.print();
+//     variadicHelper( std::forward<Args>(args) ...);  //#7
+// }
+
+template<typename ... Args>
+void variadicHelper(Args&& ... args)
 {
-    Wrapper wrapper ( std::forward<T>(first) ); //#6
-    wrapper.print();
-    variadicHelper( std::forward<Args>(args) ...);  //#7
+    if(args)
+    {
+        Wrapper wrapper ( std::forward<T>(args) );
+        variadicHelper(args-1);
+        wrapper.print();
+        variadicHelper( std::forward<Args>(args) ...);
+    }
+    std::cout << "Empty Variadic Helper" << std::endl;
 }
 
 /*
@@ -107,6 +108,8 @@ void variadicHelper(T&& first, Args&& ... args)
 int main()
 {
     variadicHelper( 3, std::string("burgers"), 2.5, Point{3.f, 0.14f} );
+
+    variadicHelper();
 }
 
 
