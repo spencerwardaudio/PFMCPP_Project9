@@ -15,6 +15,7 @@ Make the following program work, which makes use of Variadic templates and Recur
 #include <iostream>
 #include <string>
 #include <typeinfo>
+#include <utility>
 
 struct Point
 {
@@ -46,7 +47,33 @@ struct Wrapper
     { 
         std::cout << "Wrapper(" << typeid(val).name() << ")" << std::endl; 
     }
+
+    void print()
+    {
+        std::cout << "Wrapper::print(" << val << ")" << std::endl;
+    }
+
+private:
+    Type val;
 };
+
+template<>
+void Wrapper<Point>::print() 
+{ 
+    std::cout << "Wrapper::print(" << val.toString() << ")" << std::endl;
+}
+
+void variadicHelper();
+
+template<typename T, typename ... Args>
+void variadicHelper(T&& first, Args&& ... args)
+{
+    Wrapper wrapper ( std::forward<T>(first) ); //#6
+    wrapper.print();
+    variadicHelper( std::forward<Args>(args) ...);  //#7
+}
+
+void variadicHelper(){}
 
 /*
  MAKE SURE YOU ARE NOT ON THE MASTER BRANCH
